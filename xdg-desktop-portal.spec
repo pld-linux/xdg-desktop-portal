@@ -1,20 +1,33 @@
 Summary:	Portal frontend service to Flatpak
+Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
-Version:	0.3
+Version:	1.10.1
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
+#Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
 Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	3c4393f513b833c9e464820479c7db19
+# Source0-md5:	be05741143e68503ef4822794def32f3
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
-BuildRequires:	flatpak-devel
-BuildRequires:	gettext-tools
-BuildRequires:	glib2-devel
+BuildRequires:	flatpak-devel >= 1.5.0
+BuildRequires:	geoclue2-devel >= 2.5.2
+BuildRequires:	gettext-tools >= 0.18.3
+BuildRequires:	glib2-devel >= 1:2.60
+BuildRequires:	json-glib-devel
+BuildRequires:	libfuse-devel
+BuildRequires:	libportal-devel
 BuildRequires:	libtool >= 2:2.2.6
+BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
+BuildRequires:	rpmbuild(macros) >= 1.446
+BuildRequires:	xmlto
 Requires:	dbus
+Requires:	flatpak-libs >= 1.5.0
+Requires:	geoclue2-libs >= 2.5.2
+Requires:	glib2 >= 1:2.60
+Requires:	pipewire-libs >= 0.2.90
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -24,14 +37,25 @@ known as portals under a well-known name
 (/org/freedesktop/portal/desktop). The portal interfaces include APIs
 for file access, opening URIs, printing and others.
 
+%description -l pl.UTF-8
+xdg-desktop-portal działa przez wystawienie szeregu interfejsów D-Bus
+zwanych portalami pod dobrze znaną nazwą
+(org.freedesktop.portal.Desktop) i ścieżką obiektów
+(/org/freedesktop/portal/desktop). Interfejsy portali obejmują API
+dostępu do plików, otwieranie URI, drukowanie itd.
+
 %package devel
 Summary:	Development files for xdg-desktop-portal
+Summary(pl.UTF-8):	Pliki programistyczne xdg-desktop-portal
 Group:		Development/Libraries
-Requires:	flatpak-devel
-Requires:	glib2-devel
+Requires:	%{name} = %{version}-%{release}
+BuildArch:	noarch
 
 %description devel
 Development files for xdg-desktop-portal.
+
+%description devel -l pl.UTF-8
+Pliki programistyczne xdg-desktop-portal.
 
 %prep
 %setup -q
@@ -43,7 +67,8 @@ Development files for xdg-desktop-portal.
 %{__autoheader}
 %{__automake}
 %configure \
-	--disable-silent-rules
+	--disable-silent-rules \
+	--with-systemduserunitdir=%{systemduserunitdir}
 %{__make}
 
 %install
@@ -63,26 +88,61 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS README.md doc/*.html doc/*.css
 %attr(755,root,root) %{_libexecdir}/xdg-desktop-portal
+%attr(755,root,root) %{_libexecdir}/xdg-document-portal
+%attr(755,root,root) %{_libexecdir}/xdg-permission-store
+%{systemduserunitdir}/xdg-desktop-portal.service
+%{systemduserunitdir}/xdg-document-portal.service
+%{systemduserunitdir}/xdg-permission-store.service
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Access.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Account.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.AppChooser.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Background.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Email.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.FileChooser.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Inhibit.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Lockdown.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Notification.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.PermissionStore.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Print.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.RemoteDesktop.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Request.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.ScreenCast.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Screenshot.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Secret.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Session.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Settings.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Wallpaper.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Account.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Background.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Camera.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Device.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Documents.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Email.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileChooser.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileTransfer.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.GameMode.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Inhibit.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Location.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.MemoryMonitor.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.NetworkMonitor.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Notification.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.OpenURI.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.PowerProfileMonitor.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Print.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.ProxyResolver.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.RemoteDesktop.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Request.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.ScreenCast.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Screenshot.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Secret.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Session.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Settings.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Trash.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Wallpaper.xml
+%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.PermissionStore.service
 %{_datadir}/dbus-1/services/org.freedesktop.portal.Desktop.service
+%{_datadir}/dbus-1/services/org.freedesktop.portal.Documents.service
 
 %files devel
 %defattr(644,root,root,755)
-%{_pkgconfigdir}/xdg-desktop-portal.pc
+%{_npkgconfigdir}/xdg-desktop-portal.pc
