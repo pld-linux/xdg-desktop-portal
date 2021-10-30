@@ -21,6 +21,7 @@ BuildRequires:	libportal-devel
 BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.446
 BuildRequires:	xmlto
 Requires:	dbus
