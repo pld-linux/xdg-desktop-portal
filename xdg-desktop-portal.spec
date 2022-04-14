@@ -1,22 +1,23 @@
 Summary:	Portal frontend service to Flatpak
 Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
-Version:	1.10.1
+Version:	1.14.2
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
 Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	be05741143e68503ef4822794def32f3
+# Source0-md5:	f007f96703abe0877e816e1723f7bcdd
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	flatpak-devel >= 1.5.0
+BuildRequires:	gdk-pixbuf2-devel >= 2.0
 BuildRequires:	geoclue2-devel >= 2.5.2
 BuildRequires:	gettext-tools >= 0.18.3
-BuildRequires:	glib2-devel >= 1:2.60
+BuildRequires:	glib2-devel >= 1:2.66
 BuildRequires:	json-glib-devel
-BuildRequires:	libfuse-devel
+BuildRequires:	libfuse3-devel >= 3.10.0
 BuildRequires:	libportal-devel
 BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	pipewire-devel >= 0.2.90
@@ -27,8 +28,10 @@ BuildRequires:	xmlto
 Requires:	dbus
 Requires:	flatpak-libs >= 1.5.0
 Requires:	geoclue2-libs >= 2.5.2
-Requires:	glib2 >= 1:2.60
+Requires:	glib2 >= 1:2.66
+Requires:	libfuse3 >= 3.10.0
 Requires:	pipewire-libs >= 0.2.90
+Requires:	systemd-units
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -89,15 +92,19 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc NEWS README.md doc/*.html doc/*.css
 %attr(755,root,root) %{_libexecdir}/xdg-desktop-portal
+%attr(755,root,root) %{_libexecdir}/xdg-desktop-portal-rewrite-launchers
+%attr(755,root,root) %{_libexecdir}/xdg-desktop-portal-validate-icon
 %attr(755,root,root) %{_libexecdir}/xdg-document-portal
 %attr(755,root,root) %{_libexecdir}/xdg-permission-store
 %{systemduserunitdir}/xdg-desktop-portal.service
+%{systemduserunitdir}/xdg-desktop-portal-rewrite-launchers.service
 %{systemduserunitdir}/xdg-document-portal.service
 %{systemduserunitdir}/xdg-permission-store.service
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Access.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Account.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.AppChooser.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Background.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.DynamicLauncher.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Email.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.FileChooser.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Inhibit.xml
@@ -118,6 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Camera.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Device.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Documents.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.DynamicLauncher.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Email.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileChooser.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileTransfer.xml
@@ -131,6 +139,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.PowerProfileMonitor.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Print.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.ProxyResolver.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Realtime.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.RemoteDesktop.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Request.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.ScreenCast.xml
