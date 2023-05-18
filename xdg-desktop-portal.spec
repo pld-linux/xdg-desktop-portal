@@ -1,13 +1,13 @@
 Summary:	Portal frontend service to Flatpak
 Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
-Version:	1.14.2
+Version:	1.16.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
 Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	f007f96703abe0877e816e1723f7bcdd
+# Source0-md5:	3312781f8f0ed772c52c05c010690283
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -24,6 +24,8 @@ BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.446
+BuildRequires:	sed >= 4.0
+BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	xmlto
 Requires:	dbus
 Requires:	flatpak-libs >= 1.5.0
@@ -64,7 +66,10 @@ Pliki programistyczne xdg-desktop-portal.
 %prep
 %setup -q
 
+%{__sed} -i -e '/^po\/Makefile\.in$/d' configure.ac
+
 %build
+%{__gettextize}
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
@@ -107,6 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.DynamicLauncher.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Email.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.FileChooser.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.GlobalShortcuts.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Inhibit.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Lockdown.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Notification.xml
@@ -130,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileChooser.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.FileTransfer.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.GameMode.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.GlobalShortcuts.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Inhibit.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Location.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.MemoryMonitor.xml
