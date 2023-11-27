@@ -23,7 +23,7 @@ BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.446
+BuildRequires:	rpmbuild(macros) >= 1.682
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	xmlto
