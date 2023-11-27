@@ -26,7 +26,9 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.682
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel >= 1:209
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	xmlto
+BuildRequires:	xz
 Requires:	dbus
 Requires:	flatpak-libs >= 1.5.0
 Requires:	geoclue2-libs >= 2.5.2
