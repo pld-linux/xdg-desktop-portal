@@ -10,6 +10,8 @@ Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{versi
 # Source0-md5:	20e0b28c1528e57b13cc236ba7840e03
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	bubblewrap
+BuildRequires:	docbook-dtd412-xml
+BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docutils
 BuildRequires:	flatpak-devel >= 1.5.0
 BuildRequires:	gdk-pixbuf2-devel >= 2.0
