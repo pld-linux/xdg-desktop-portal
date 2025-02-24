@@ -26,7 +26,7 @@ BuildRequires:	ninja
 BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xmlto
@@ -71,17 +71,17 @@ Pliki programistyczne xdg-desktop-portal.
 %setup -q
 
 %build
-%meson build \
+%meson \
 	-Dsystemd-user-unit-dir=%{systemduserunitdir}
 
-%ninja_build -C build
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/%{_datadir}/xdg-desktop-portal/portals
 
-%ninja_install -C build
+%meson_install
 
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/doc/xdg-desktop-portal
 
