@@ -1,40 +1,43 @@
 Summary:	Portal frontend service to Flatpak
 Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
-Version:	1.18.4
+Version:	1.20.0
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
 Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	4ebe7be08961456544d0ceeca22a03ea
+# Source0-md5:	9f6450322a359a95018b57960d1ca4fd
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	bubblewrap
-BuildRequires:	docbook-dtd412-xml
-BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docutils
 BuildRequires:	flatpak-devel >= 1.5.0
 BuildRequires:	gdk-pixbuf2-devel >= 2.0
 BuildRequires:	geoclue2-devel >= 2.5.2
 BuildRequires:	gettext-tools >= 0.18.3
-BuildRequires:	glib2-devel >= 1:2.66
+BuildRequires:	glib2-devel >= 1:2.72
+BuildRequires:	gstreamer-plugins-base-devel >= 0.10.12
 BuildRequires:	json-glib-devel
 BuildRequires:	libfuse3-devel >= 3.10.0
-BuildRequires:	libportal-devel
-BuildRequires:	meson >= 0.58
+BuildRequires:	libgudev-devel
+BuildRequires:	meson >= 0.60
 BuildRequires:	ninja
 BuildRequires:	pipewire-devel >= 0.2.90
 BuildRequires:	pkgconfig >= 1:0.24
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 2.042
+BuildRequires:	python3
+BuildRequires:	python3-furo
+BuildRequires:	python3-sphinxext.opengraph
+BuildRequires:	python3-sphinx_copybutton
+BuildRequires:	sphinx-pdg
 BuildRequires:	systemd-devel >= 1:209
 BuildRequires:	tar >= 1:1.22
-BuildRequires:	xmlto
 BuildRequires:	xz
 Requires:	dbus
 Requires:	flatpak-libs >= 1.5.0
 Requires:	geoclue2-libs >= 2.5.2
-Requires:	glib2 >= 1:2.66
+Requires:	glib2 >= 1:2.72
 Requires:	libfuse3 >= 3.10.0
 Requires:	pipewire-libs >= 0.2.90
 Requires:	systemd-units
@@ -72,7 +75,8 @@ Pliki programistyczne xdg-desktop-portal.
 
 %build
 %meson \
-	-Dsystemd-user-unit-dir=%{systemduserunitdir}
+	-Dsystemd-user-unit-dir=%{systemduserunitdir} \
+	-Dtests=disabled
 
 %meson_build
 
@@ -83,8 +87,6 @@ install -d $RPM_BUILD_ROOT/%{_datadir}/xdg-desktop-portal/portals
 
 %meson_install
 
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/doc/xdg-desktop-portal
-
 %find_lang %{name}
 
 %clean
@@ -92,16 +94,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc NEWS README.md doc/*.html doc/*.css
+%doc NEWS.md README.md %{_vpath_builddir}/doc/html/{_sources,_static,*.html,*.js}
 %attr(755,root,root) %{_libexecdir}/xdg-desktop-portal
 %attr(755,root,root) %{_libexecdir}/xdg-desktop-portal-rewrite-launchers
 %attr(755,root,root) %{_libexecdir}/xdg-desktop-portal-validate-icon
+%attr(755,root,root) %{_libexecdir}/xdg-desktop-portal-validate-sound
 %attr(755,root,root) %{_libexecdir}/xdg-document-portal
 %attr(755,root,root) %{_libexecdir}/xdg-permission-store
 %{systemduserunitdir}/xdg-desktop-portal.service
 %{systemduserunitdir}/xdg-desktop-portal-rewrite-launchers.service
 %{systemduserunitdir}/xdg-document-portal.service
 %{systemduserunitdir}/xdg-permission-store.service
+%{_datadir}/dbus-1/interfaces/org.freedesktop.host.portal.Registry.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Access.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Account.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.AppChooser.xml
@@ -124,12 +128,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Secret.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Session.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Settings.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Usb.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.impl.portal.Wallpaper.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Account.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Background.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Camera.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Clipboard.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Device.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Documents.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.DynamicLauncher.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Email.xml
@@ -156,6 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Session.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Settings.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Trash.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Usb.xml
 %{_datadir}/dbus-1/interfaces/org.freedesktop.portal.Wallpaper.xml
 %{_datadir}/dbus-1/services/org.freedesktop.impl.portal.PermissionStore.service
 %{_datadir}/dbus-1/services/org.freedesktop.portal.Desktop.service
