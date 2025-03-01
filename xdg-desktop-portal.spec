@@ -2,7 +2,7 @@ Summary:	Portal frontend service to Flatpak
 Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
 Version:	1.20.0
-Release:	1
+Release:	2
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
@@ -86,6 +86,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/%{_datadir}/xdg-desktop-portal/portals
 
 %meson_install
+
+%{__rm} -r $RPM_BUILD_ROOT%{_localedir}/ie
 
 %find_lang %{name}
 
