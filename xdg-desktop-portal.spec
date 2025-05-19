@@ -1,13 +1,13 @@
 Summary:	Portal frontend service to Flatpak
 Summary(pl.UTF-8):	Usługa frontendu portalu dla Flatpaka
 Name:		xdg-desktop-portal
-Version:	1.20.1
+Version:	1.20.2
 Release:	1
 License:	LGPL v2+
 Group:		Libraries
 #Source0Download: https://github.com/flatpak/xdg-desktop-portal/releases
 Source0:	https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	1e6218020d0a5c6b0452b50009884bff
+# Source0-md5:	9f05f773e9782877af1fa8da7087af30
 URL:		https://github.com/flatpak/xdg-desktop-portal/
 BuildRequires:	bubblewrap
 BuildRequires:	docutils
